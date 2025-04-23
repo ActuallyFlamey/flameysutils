@@ -5,6 +5,7 @@
 ## Miscellaneous Utilities
 - [`swap()`](#void-swap) - Swaps the values of two variables.
 - [`arghelper()`](#void-arghelper) - Fills a `va_list` with the specified variadic arguments.
+- [`validarrcheck()`](#void-validarrcheck) - Checks if the given array indices are valid.
 
 ## Input Functions
 - [`vinput()`](#void-vinput)
@@ -18,7 +19,7 @@
 - [`cvarrinput()`](#void-cvarrinput)
 - [`carrinput()`](#void-carrinput) - Same as [`arrinput()`](#void-arrinput), but checks the input against a condition and retries if it doesn't match.
 - [`vcvarrinput()`](#void-vcvarrinput)
-- [`vcarrinput()`](#void-vcarrinput) - Same as [`cvarrinput()`](#void-cvarrinput), but checks the input against a condition and retries if it doesn't match. The condition function can take in a `va_list` if it needs other arguments.
+- [`vcarrinput()`](#void-vcarrinput) - Same as [`arrinput()`](#void-arrinput), but checks the input against a condition and retries if it doesn't match. The condition function can take in a `va_list` if it needs other arguments.
 
 ## Printing Functions
 - [`printarr()` macro](#printarr-macro) - Prints an array to the standard input in [0, 1, 2, 3, ...] format.
@@ -28,6 +29,7 @@
 - [`void randints()`](#void-randints) - Inserts random integers inside an array.
 
 ## Array Utilities
+- [`arrcopy()` macro](#arrcopy-macro) - Copies the values of an array to another array.
 - [`shuffle()` macro](#shuffle-macro) - Shuffles an array.
 - [`average()` macro](#average-macro) - Calculates the average of an array's values.
 - [`min()` macro](#min-macro) - Finds the minimum value in an array.
@@ -72,6 +74,17 @@ You are given the responsibility to run `va_end()` on the `va_list` when you've 
 #### Parameters
 - **`dest`:** **`va_list*`** Pointer to the destination `va_list`.
 - **`...`:** Arguments to put inside the `va_list`.
+
+### `void validarrcheck()`
+
+#### Description
+Checks if the given array indices are valid.
+
+#### Parameters
+- **`array`:** **`void*`** The array to run checks on.
+- **`start`:** **`size_t`** The array index given as the start.
+- **`end`:** **`size_t`** The array index given as the end.
+- **`funcname`:** **`const char*`** The calling function's name.
 
 ## Input Functions
 
@@ -349,6 +362,17 @@ Inserts random integers inside an array.
 - **`max`:** **`int`** The highest possible number.
 
 ## Array Utilities
+
+### `arrcopy()` macro
+
+#### Description
+Copies the values of an array to another array.
+
+#### Parameters
+- **`dest`:** **`void*`** The destination array.
+- **`orig`:** **`void*`** The original array.
+- **`start`:** **`size_t`** The array index to start copying from (`0` to start from the beginning).
+- **`end`:** **`size_t`** The array index to stop copying at (array length - 1 to finish at the end).
 
 ### `shuffle()` macro
 

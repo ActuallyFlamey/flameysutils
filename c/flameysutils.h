@@ -2,7 +2,7 @@
     * @file flameysutils.h
     * @author Flamey (flamey@hexa.blue)
     * @brief Some useful functions that I use often.
-    * @version 0.2.0
+    * @version 0.2.1
     * @date 2025
 */
 
@@ -54,6 +54,35 @@ void arghelper
     va_copy(*dest, args);
 
     va_end(args);
+}
+
+/**
+    * @brief Checks if the given array indices are valid.
+    *
+    * @param array The array to run checks on.
+    * @param start The array index given as the start.
+    * @param end The array index given as the end.
+    * @param funcname The calling function's name.
+*/
+void validarrcheck
+(
+    void* array,
+    size_t start,
+    size_t end,
+    const char* funcname
+)
+{
+    if (start > end)
+    {
+        fprintf(stderr, "%s(): `start` must be less than or equal to `end`.\nExpected `start` to be <= %u, but it was %u.\n", funcname, end, start);
+        exit(EXIT_FAILURE);
+    }
+
+    if (end >= (sizeof(array) / sizeof(array[0])))
+    {
+        fprintf(stderr, "%s(): `end` must be less than the array length.\nExpected `end` to be < %u, but it was %u\n", funcname, sizeof(array) / sizeof(array[0]), end);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /*
@@ -305,6 +334,8 @@ void varrinput
     va_list args
 )
 {
+    validarrcheck(array, start, end, "varrinput");
+
     va_list copy;
 
     for (size_t i = start; i <= end; i++)
@@ -355,6 +386,8 @@ void arrinput
     ...
 )
 {
+    validarrcheck(array, start, end, "arrinput");
+
     va_list args;
     va_start(args, ordinalBefore);
 
@@ -396,6 +429,8 @@ void cvarrinput
     va_list args
 )
 {
+    validarrcheck(array, start, end, "cvarrinput");
+
     va_list copy;
 
     for (size_t i = 0; i <= end; i++)
@@ -458,6 +493,8 @@ void carrinput
     ...
 )
 {
+    validarrcheck(array, start, end, "carrinput");
+
     va_list args;
     va_start(args, condition);
 
@@ -502,6 +539,8 @@ void vcvarrinput
     va_list args
 )
 {
+    validarrcheck(array, start, end, "vcvarrinput");
+
     va_list copy, condargscopy;
 
     for (size_t i = 0; i <= end; i++)
@@ -585,6 +624,8 @@ void vcarrinput
     ...
 )
 {
+    validarrcheck(array, start, end, "vcarrinput");
+
     va_list args;
     va_start(args, condargs);
 
@@ -607,6 +648,8 @@ void vcarrinput
 */
 #define printarr(array, format, start, end) ( \
 { \
+    validarrcheck(array, start, end, "printarr"); \
+    \
     printf("["); \
     \
     for (size_t i = start; i <= end; i++) \
@@ -663,6 +706,8 @@ void randints
     int max
 )
 {
+    validarrcheck(array, start, end, "randints");
+
     srand(time(0));
 
     for (size_t i = start; i <= end; i++)
@@ -676,6 +721,30 @@ void randints
 */
 
 /**
+    * @brief Copies the values of an array to another array.
+    * 
+    * @param dest The destination array.
+    * @param orig The original array.
+    * @param start The array index to start copying from (`0` to start from the beginning).
+    * @param end The array index to stop copying at (array length - 1 to finish at the end).
+*/
+#define arrcopy(dest, orig, start, end) ( \
+{ \
+    validarrcheck(orig, start, end, "arrcopy"); \
+    \
+    if (sizeof(dest) / sizeof(dest[0]) < (end - start + 1)) \
+    { \
+        fprintf(stderr, "arrcopy(): `dest` should be big enough to hold `orig`'s items from `start` to end`.\nExpected length of `dest` to be >= %u, but it was %u.\n", end - start + 1, sizeof(dest) / sizeof(dest[0])); \
+        exit(EXIT_FAILURE); \
+    } \
+    \
+    for (size_t i = start; i <= end; i++) \
+    { \
+        dest[i] = orig[i]; \
+    } \
+})
+
+/**
     * @brief Shuffles an array.
     * 
     * @param array The array to shuffle.
@@ -684,6 +753,8 @@ void randints
 */
 #define shuffle(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "shuffle"); \
+    \
     srand(time(0)); \
     \
     for (size_t i = start; i <= end; i++) \
@@ -705,6 +776,8 @@ void randints
 */
 #define average(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "average"); \
+    \
     long long sum = 0; \
     long double avg; \
     \
@@ -729,6 +802,8 @@ void randints
 */
 #define min(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "min"); \
+    \
     typeof(array[0]) minimum = array[start]; \
     \
     for (size_t i = start; i <= end; i++) \
@@ -750,6 +825,8 @@ void randints
 */
 #define max(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "max"); \
+    \
     typeof(array[0]) maximum = array[start]; \
     \
     for (size_t i = start; i <= end; i++) \
@@ -771,6 +848,8 @@ void randints
 */
 #define med(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "med"); \
+    \
     typeof(array[0]) medium = array[start]; \
     long double avg = average(array, start, end); \
     \
@@ -793,6 +872,8 @@ void randints
 */
 #define imin(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "imin"); \
+    \
     size_t index = start; \
     \
     for (size_t i = start; i <= end; i++) \
@@ -814,6 +895,8 @@ void randints
 */
 #define imax(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "imax"); \
+    \
     size_t index = start; \
     \
     for (size_t i = start; i <= end; i++) \
@@ -835,6 +918,8 @@ void randints
 */
 #define imed(array, start, end) ( \
 { \
+    validarrcheck(array, start, end, "imed"); \
+    \
     size_t index = start; \
     long double avg = average(array, start, end); \
     \
@@ -862,6 +947,8 @@ void randints
 */
 #define is_sorted(array, start, end, compare) ( \
 { \
+    validarrcheck(array, start, end, "is_sorted"); \
+    \
     bool result = true; \
     \
     for (size_t i = start + 1; i <= end; i++) \
@@ -885,7 +972,12 @@ void randints
     * @param end The array index to stop sorting at (array length - 1 to finish at the end).
     * @param compare A comparison function. This header provides `ascending()` and `descending()`, but you can make your own.
 */
-#define qsort(array, start, end, compare) qsort(array + start, end + 1 - start, sizeof(array[0]), compare)
+#define qsort(array, start, end, compare) ( \
+{ \
+    validarrcheck(array, start, end, "qsort"); \
+    \
+    qsort(array + start, end + 1 - start, sizeof(array[0]), compare); \
+})
 
 /**
     * @brief Sorts an array using the Bubble Sort algorithm.
@@ -898,6 +990,8 @@ void randints
 */
 #define bsort(array, start, end, compare) ( \
 { \
+    validarrcheck(array, start, end, "bsort"); \
+    \
     for (size_t i = start; i < end; i++) \
     { \
         for (size_t j = start; j < end - i; j++) \
@@ -921,6 +1015,8 @@ void randints
 */
 #define gsort(array, start, end, compare) ( \
 { \
+    validarrcheck(array, start, end, "gsort"); \
+    \
     for (size_t i = start + 1; i <= end; i++) \
     { \
         if ((*compare)(&array[i - 1], &array[i]) > 0) \
@@ -947,6 +1043,8 @@ void randints
 */
 #define bogosort(array, start, end, compare) ( \
 { \
+    validarrcheck(array, start, end, "bogosort"); \
+    \
     while (!is_sorted(array, start, end, compare)) \
     { \
         shuffle(array, start, end); \
@@ -964,6 +1062,8 @@ void randints
 */
 #define mrclsort(array, start, end, compare) ( \
 { \
+    validarrcheck(array, start, end, "mrclsort"); \
+    \
     while (!(is_sorted(array, start, end, compare))) {} \
 })
 

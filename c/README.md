@@ -86,6 +86,28 @@ Checks if the given array indices are valid.
 - **`end`:** **`size_t`** The array index given as the end.
 - **`funcname`:** **`const char*`** The calling function's name.
 
+## String Utilities
+
+### `void lowercase()`
+
+#### Description
+Converts a string to lowercase.
+
+#### Parameters
+- **`string`:** **`char*`** The string to modify.
+- **`start`:** **`size_t`** The string index to start modifying from (`0` to start from the beginning).
+- **`end`:** **`size_t`** The string index to stop modifying at (`strlen(string)` to stop at the end).
+
+### `void uppercase()`
+
+#### Description
+Converts a string to uppercase.
+
+#### Parameters
+- **`string`:** **`char*`** The string to modify.
+- **`start`:** **`size_t`** The string index to start modifying from (`0` to start from the beginning).
+- **`end`:** **`size_t`** The string index to stop modifying at (`strlen(string)` to stop at the end).
+
 ## Input Functions
 
 ### `void vinput()`

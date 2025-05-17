@@ -7,7 +7,7 @@ A collection of functions that I find useful. Mostly done as an experiment for m
 ## C
 
 ### Documentation
-See [the C documentation](./c/docs.md).
+See [the C documentation](./c/README.md).
 
 # Installation Guide
 

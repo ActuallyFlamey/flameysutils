@@ -2,7 +2,7 @@
     * @file flameysutils.h
     * @author Flamey (flamey@hexa.blue)
     * @brief Some useful functions that I use often.
-    * @version 0.2.1
+    * @version 0.2.2
     * @date 2025
 */
 
@@ -12,10 +12,13 @@
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
+#include <ctype.h>
 
 /*
     MISCELLANEOUS UTILITIES
 */
+
+#define nullptr ((void*) 0)
 
 /**
     * @brief Swaps the values of two variables.
@@ -78,10 +81,58 @@ void validarrcheck
         exit(EXIT_FAILURE);
     }
 
-    if (end >= (sizeof(array) / sizeof(array[0])))
+    if (array == nullptr)
     {
-        fprintf(stderr, "%s(): `end` must be less than the array length.\nExpected `end` to be < %u, but it was %u\n", funcname, sizeof(array) / sizeof(array[0]), end);
+        fprintf(stderr, "%s(): `array` cannot be a null pointer.\n", funcname);
         exit(EXIT_FAILURE);
+    }
+}
+
+/*
+    STRING UTILITIES
+*/
+
+/**
+    * @brief Converts a string to lowercase.
+    *
+    * @param string The string to modify.
+    * @param start The string index to start modifying from (`0` to start from the beginning).
+    * @param end The string index to stop modifying at (string length - 1 to finish at the end).
+*/
+void lowercase
+(
+    char* string,
+    size_t start,
+    size_t end
+)
+{
+    validarrcheck(string, start, end, "lowercase");
+    
+    for (size_t i = start; i <= end; i++)
+    {
+        string[i] = tolower(string[i]);
+    }
+}
+
+/**
+    * @brief Converts a string to uppercase.
+    *
+    * @param string The string to modify.
+    * @param start The string index to start modifying from (`0` to start from the beginning).
+    * @param end The string index to stop modifying at (string length - 1 to finish at the end).
+*/
+void uppercase
+(
+    char* string,
+    size_t start,
+    size_t end
+)
+{
+    validarrcheck(string, start, end, "uppercase");
+    
+    for (size_t i = start; i <= end; i++)
+    {
+        string[i] = toupper(string[i]);
     }
 }
 
